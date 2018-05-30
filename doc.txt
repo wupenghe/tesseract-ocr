@@ -1,0 +1,40 @@
+1、先更新依赖
+yum -y update 
+yum -y install libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel
+
+2、下载leptonica
+wget http://www.leptonica.com/source/leptonica-1.76.tar.gz
+tar -zxvf leptonica-1.74.1.tar.gz
+cd leptonica-1.74.1
+./autobuild
+./configure
+make
+make install
+之后在/usr/local/include可以找到leptonica的文件夹
+在/usr/local/lib 找到
+liblept.a   liblept.so.5      libtesseract.la    libtesseract.so.3.0.5
+liblept.la  liblept.so.5.0.3  libtesseract.so    pkgconfig
+liblept.so  libtesseract.a    libtesseract.so.3
+
+3、下载tesseract
+https://github.com/tesseract-ocr/tesseract/releases下载源码，上传到服务器
+解压
+./autogen.sh
+./configure（需要配置以下leptonica环境变量）
+可以通过 vim /etc/profile 来实现，在文件最后加入以下几行文本：
+export LD_LIBRARY_PATH=$LD_LIBRARY_PAYT:/usr/local/lib
+export LIBLEPT_HEADERSDIR=/usr/local/include
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+source profile;
+
+make; 
+make install
+之后在/usr/local/include找到tesseract文件夹
+在/usr/local/share/tessdata放入语言包
+
+
+
+命令：tesseract x.png out
+即可在当前文件夹内找到out.txt，即识别后的字符
+
+感谢网上各大佬提供的资料,本文档仅自己记录安装流程
